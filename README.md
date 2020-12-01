@@ -6,6 +6,6 @@
 
  ## Скриншоты
 ![Alt-текст](https://github.com/GunbinSergey/Cheese/blob/main/Console1.png "Консоль")
-![Alt-текст](https://github.com/GunbinSergey/Cheese/blob/main/Console2.png"Консоль")
+![Alt-текст](https://github.com/GunbinSergey/Cheese/blob/main/Console2.png "Консоль")
 ![Alt-текст](https://github.com/GunbinSergey/Cheese/blob/main/Console3H.png "Консоль c подвохом")
 
