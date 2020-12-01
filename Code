@@ -1,0 +1,261 @@
+#include <iostream>;
+using namespace std;
+
+
+void Visualization(char letter1, int number1, char Fig1, char letter2, int number2, char Fig2)
+{
+	// Создание и заполнение поля
+	char field[8][8];
+	for (int i = 7; i >= 0; i--)
+	{
+	
+		for (int j = 0; j < 8; j++)
+		{
+			if ((i + j) % 2 == 1)
+			{
+				field[i][j] = ' ';
+			}
+			else
+			{
+				field[i][j] = 'o';
+			}
+		}
+	}
+	//Растоновка фигур
+	field[number1-1][letter1 - 'A'] = Fig1;
+	field[number2 -1][letter2 - 'A'] = Fig2;
+
+	//Вывод поля
+	cout << "  ";
+	for (int i = 0; i < 8; i++)
+	{
+		cout << char('A' + i);
+	}
+	cout << endl;
+
+	for (int i = 7; i >= 0; i--)
+	{
+		cout << i+1 << '|';
+		for (int j = 0; j < 8; j++)
+		{
+			if ((i + j) % 2 == 1)
+			{
+
+				cout << field[i][j];
+			}
+			else
+			{
+		
+				cout << field[i][j];
+			}
+		}
+		cout << "|" << endl;
+	}
+
+}
+
+void CheckColor(char letter1, int number1, char letter2, int number2)  //A
+{
+	if ((number1 + int(letter1 - 'A') % 2) == (number2 + int(letter2 - 'A') % 2))
+	{
+		cout << "Поля одинакого цвета" << endl;
+	}
+	else
+		cout << "Поля разного цвета" << endl;
+	Visualization(letter1, number1, 'A', letter2, number2, 'B');
+}
+
+
+void CheckFerz(char letter1, int number1, char letter2, int number2) //Б
+{
+	bool Ch1 = (letter1 == letter2) || (number1 == number2);
+	bool Ch2 = ((letter1 == letter2) || (number1 == number2));
+	bool Ch3 = (number1 + int(letter1 - 'A') == number2 + int(letter2 - 'A'));
+	if ( Ch1 || Ch2 || Ch3)
+	{
+		cout << "Ферзь рубит пешку" << endl;
+	}
+	else
+		cout << "Ферзь не рубит пешку" << endl;
+	Visualization(letter1, number1, 'F', letter2, number2, 'P');
+}
+
+void CheckHorse(char letter1, int number1, char letter2, int number2) //В
+{
+	bool Ch1 = (abs(int(letter1 - letter2)) == 3) || (abs(int(letter1 - letter2)) == 2);
+	bool Ch2 = (abs(int(number1 - number2)) == 3) || (abs(int(number1 - number2)) == 2);
+
+		if (Ch1 || Ch2)
+		{
+			cout << "Конь рубит пешку" << endl;
+		}
+		else
+			cout << "Конь не рубит пешку" << endl;
+		Visualization(letter1, number1, 'H', letter2, number2, 'P');
+}
+
+void CheckLadyaTwo(char letter1, int number1, char letter2, int number2) //Г
+{
+	bool Ch1 = (letter1 == letter2) || (number1 == number2);
+	Visualization(letter1, number1, 'L', letter2, number2, 'P');
+		if (Ch1)
+		{
+			cout << "Ладья рубит пешку в один ход" << endl;
+		}
+		else
+		{
+			cout << "Ладья не рубит пешку в один ход" << endl;
+			cout << "Но ладья срубит пешку на следюущий ход, если перемиститься на " << letter1 << number2 << endl;
+			Visualization(letter1, number2, 'L', letter2, number2, 'P');
+			cout << "Или если перемиститься на " << letter2 << number1 << endl;
+			Visualization(letter2, number1, 'L', letter2, number2, 'P');
+		}
+			
+}
+
+
+
+void CheckFerzaTwo(char letter1, int number1, char letter2, int number2) //Д
+{
+	bool Ch1 = (letter1 == letter2) || (number1 == number2);
+	bool Ch2 = (number1 + int(letter1 - 'A') == number2 + int(letter2 - 'A'));
+
+	Visualization(letter1, number1, 'F', letter2, number2, 'P');
+	if (Ch1 || Ch2)
+	{
+		cout << "Ладья рубит пешку в один ход" << endl;
+	}
+	else
+	{
+		cout << "Ферзь не рубит пешку в один ход" << endl;
+		cout << "Но ферзь срубит пешку на следюущий ход, если перемиститься на " << letter1 << number2 << endl;
+		Visualization(letter1, number2, 'F', letter2, number2, 'P');
+		cout << "Или если перемиститься на " << letter2 << number1 << endl;
+		Visualization(letter2, number1, 'F', letter2, number2, 'P');
+
+	}
+
+}
+
+void CheckElephTwo(char letter1, int number1, char letter2, int number2) //Е
+{
+	
+	bool Ch1 = ((number1 + int(letter1 - 'A') % 2) == (number2 + int(letter2 - 'A') % 2));
+	bool Ch2 = (number1 + int(letter1 - 'A') == number2 + int(letter2 - 'A'));
+	Visualization(letter1, number1, 'E', letter2, number2, 'P');
+	if (!Ch1)
+	{
+		cout << "Слон не сможет срубить пешку, так как онм нах-ся на клетках разных цветов" << endl;
+	}
+	else if (Ch2)
+	{
+		cout << "Слон рубит пешку в один ход" << endl;
+
+	}
+	else
+	{
+		int Delta = ((number2 + 1 + int(letter2 - 'A')) - (number1 + 1 + int(letter1 - 'A'))) / 2;
+		if ((number1 + Delta > 8) || (number1 + Delta < 0) || (letter1 + Delta < 'A') || (letter1 + Delta > 'H'))
+			cout << "Слон рубит пешку и в два хода" << endl;
+		else
+		{
+			cout << "Слон не рубит пешку в один ход" << endl;
+			cout << "Но Слон срубит пешку на следюущий ход, если перемиститься на " << char(letter1 + Delta) << (Delta + number1) << endl;
+			Visualization(letter1 + Delta, Delta + number1, 'E', letter2, number2, 'P');
+		}
+	}
+}
+
+
+
+
+int num(float prenum) //Проверка на невыход числа
+{
+	if (prenum < 0)
+	{
+		cout << "Вы случайно ввели отрицательное число, мы это заметили и исправили" << endl;
+		
+	}
+	if (prenum != floor(prenum))
+	{
+		cout << "Вы случайно ввели дробное число, мы это заметили и исправили, взяв целую часть" << endl;
+		
+	}
+	 int num = floor(abs(prenum)); // Преобразование защищающие шифровку от неправильной работы
+	 if (num > 8)
+	 {
+		 cout << "Получиенно число слишком велико взят максимум" << endl;
+		 num = 8; 
+	 }
+	 else if  (num < 1)
+	 {
+		 cout << "Получиенно число слишком мало взят минимум" << endl;
+			 num = 1;
+	 }
+	 return num;
+}
+
+char let(char l) //Проверка на невыход буквы
+{
+	if (l < 'A')
+	{
+		l = 'A';
+	}
+	else if (l > 'H')
+	{
+		l = 'H';
+	}
+	return l;
+}
+
+int main()
+{
+	//cout << int('♙') << endl;
+	//cout << int('♟')<< endl;
+	//cout << int('♛') << endl;
+	setlocale(LC_CTYPE, "rus");
+	//cout << "  ";
+	cout << "Выберите функцию программы: " << endl;
+	cout << "1: Проверить соответсвие цветов двух клеток " << endl;
+	cout << "2: Проверить угрожает ли ферзь, стоя на 1 клетке, 2 клетке " << endl;
+	cout << "3: Проверить угрожает ли конь, стоя на 1 клетке, 2 клетке " << endl;
+	cout << "4: Проверить угрожает ли ладья, стоя на 1 клетке, 2 клетке " << endl;
+	cout << "5: Проверить угрожает ли ферзь, стоя на 1 клетке, 2 клетке " << endl;
+	cout << "6: Проверить угрожает ли слон, стоя на 1 клетке, 2 клетке " << endl;
+	int temp = 0;
+	int Yes = 1;
+	while (Yes == 1)
+	{
+		cout << "Выберите функцию программы: " << endl;
+		cin >> temp;
+
+		float num1, num2;
+		char let1, let2;
+
+		cout << "Введите координату 1 точки в формате заглавная буква цифра (Например: B1)" << endl;
+		cin >> let1;
+		cin >> num1;
+
+		cout << "Введите координату 2 точки в формате заглавная буква цифра (Например: B2)" << endl;
+		cin >> let2;
+		cin >> num2;
+
+		if (temp == 1)
+			CheckColor(let(let1), num(num1), let(let2), num(num2));
+		else if (temp == 2)
+			CheckFerz(let(let1), num(num1), let(let2), num(num2));
+		else if (temp == 3)
+			CheckHorse(let(let1), num(num1), let(let2), num(num2));
+		else if (temp == 4)
+			CheckLadyaTwo(let(let1), num(num1), let(let2), num(num2));
+		else if (temp == 5)
+			CheckFerzaTwo(let(let1), num(num1), let(let2), num(num2));
+		else if (temp == 6)
+			CheckElephTwo(let(let1), num(num1), let(let2), num(num2));
+		cout << "Продолжить работу программы? (Да-1, Нет - 0):";
+			cin >> Yes;
+
+	}
+	//Visualization(field);
+
+}
